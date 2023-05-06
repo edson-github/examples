@@ -43,7 +43,7 @@ def webhook(event, context):
     """
 
     bot = configure_telegram()
-    logger.info('Event: {}'.format(event))
+    logger.info(f'Event: {event}')
 
     if event.get('requestContext', {}).get('http', {}).get('method') == 'POST' and event.get('body'): 
         logger.info('Message received')
@@ -69,15 +69,7 @@ def set_webhook(event, context):
     Sets the Telegram bot webhook.
     """
 
-    logger.info('Event: {}'.format(event))
+    logger.info(f'Event: {event}')
     bot = configure_telegram()
-    url = 'https://{}/{}/'.format(
-        event.get('headers').get('host'),
-        event.get('requestContext').get('stage'),
-    )
-    webhook = bot.set_webhook(url)
-
-    if webhook:
-        return OK_RESPONSE
-
-    return ERROR_RESPONSE
+    url = f"https://{event.get('headers').get('host')}/{event.get('requestContext').get('stage')}/"
+    return OK_RESPONSE if (webhook := bot.set_webhook(url)) else ERROR_RESPONSE

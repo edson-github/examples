@@ -9,7 +9,9 @@ mongo_collection_name = os.environ['MONGO_COLLECTION_NAME']
 url = os.environ['MONGO_DB_URL']
 
 # Connection String
-client = pymongo.MongoClient("mongodb+srv://" + usr + ":" + pwd + "@" + url + "/test?retryWrites=true&w=majority")
+client = pymongo.MongoClient(
+    f"mongodb+srv://{usr}:{pwd}@{url}/test?retryWrites=true&w=majority"
+)
 db = client[mongo_db_name]
 collection = db[mongo_collection_name]
 
@@ -24,15 +26,9 @@ def delete(event, context):
     # if no item return 404
     if del_resp.deleted_count == 0:
 
-        response = {
+        return {
             "statusCode": 404,
         }
-
-        return response
-
-    # create a response
-    response = {
+    return {
         "statusCode": 204,
     }
-
-    return response

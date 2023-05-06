@@ -18,14 +18,12 @@ def lucky_number(event, context):
         upperLimit = 100
 
     number = random.randint(0, upperLimit)
-    response = {
+    return {
         'version': '1.0',
         'response': {
             'outputSpeech': {
                 'type': 'PlainText',
-                'text': 'Your lucky number is ' + str(number),
+                'text': f'Your lucky number is {number}',
             }
-        }
+        },
     }
-
-    return response

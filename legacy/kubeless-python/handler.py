@@ -7,9 +7,4 @@ def hello(event, context):
         "input": event['data']
     }
 
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(body)
-    }
-
-    return response
+    return {"statusCode": 200, "body": json.dumps(body)}

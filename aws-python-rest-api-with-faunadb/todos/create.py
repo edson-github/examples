@@ -22,10 +22,4 @@ def create(event, context):
     # write the todo to the database
     created = client.query(query.create(TODOS, {'data': data}))
 
-    # create a response
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(make_result(created))
-    }
-
-    return response
+    return {"statusCode": 200, "body": json.dumps(make_result(created))}

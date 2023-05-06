@@ -12,10 +12,7 @@ def list(event, context):
     # fetch all todos from the database
     result = table.scan()
 
-    # create a response
-    response = {
+    return {
         "statusCode": 200,
-        "body": json.dumps(result['Items'], cls=decimalencoder.DecimalEncoder)
+        "body": json.dumps(result['Items'], cls=decimalencoder.DecimalEncoder),
     }
-
-    return response

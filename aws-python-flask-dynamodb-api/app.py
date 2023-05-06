@@ -23,11 +23,18 @@ def get_user(user_id):
         TableName=USERS_TABLE, Key={'userId': {'S': user_id}}
     )
     item = result.get('Item')
-    if not item:
-        return jsonify({'error': 'Could not find user with provided "userId"'}), 404
-
-    return jsonify(
-        {'userId': item.get('userId').get('S'), 'name': item.get('name').get('S')}
+    return (
+        jsonify(
+            {
+                'userId': item.get('userId').get('S'),
+                'name': item.get('name').get('S'),
+            }
+        )
+        if item
+        else (
+            jsonify({'error': 'Could not find user with provided "userId"'}),
+            404,
+        )
     )
 
 

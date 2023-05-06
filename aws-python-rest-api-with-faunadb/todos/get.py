@@ -11,10 +11,4 @@ def get(event, context):
     ref = Ref(TODOS, event['pathParameters']['id'])
     fetched = client.query(query.get(ref))
 
-    # create a response
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(make_result(fetched))
-    }
-
-    return response
+    return {"statusCode": 200, "body": json.dumps(make_result(fetched))}

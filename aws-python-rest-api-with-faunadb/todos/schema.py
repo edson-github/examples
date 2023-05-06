@@ -24,9 +24,4 @@ def schema(event, context):
         create_all_todos
     ))
 
-    # create a response
-    response = {
-        "statusCode": 200
-    }
-
-    return response
+    return {"statusCode": 200}

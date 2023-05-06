@@ -2,6 +2,6 @@
 
 
 def main_handler(event, context):
-    print(str(event))
+    print(event)
     return "hello world"
 

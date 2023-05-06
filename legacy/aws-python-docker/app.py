@@ -6,9 +6,4 @@ def handler(event, context):
         "message": "Hello, world! Your function executed successfully!",
     }
 
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(body)
-    }
-
-    return response
+    return {"statusCode": 200, "body": json.dumps(body)}

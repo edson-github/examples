@@ -11,7 +11,9 @@ mongo_collection_name = os.environ['MONGO_COLLECTION_NAME']
 url = os.environ['MONGO_DB_URL']
 
 # Connection String
-client = pymongo.MongoClient("mongodb+srv://" + usr + ":" + pwd + "@" + url + "/test?retryWrites=true&w=majority")
+client = pymongo.MongoClient(
+    f"mongodb+srv://{usr}:{pwd}@{url}/test?retryWrites=true&w=majority"
+)
 db = client[mongo_db_name]
 collection = db[mongo_collection_name]
 
@@ -29,11 +31,4 @@ def create(event, context):
     # write item to database
     collection.insert_one(item)
 
-    # create response
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(item)
-    }
-
-    # return response
-    return response
+    return {"statusCode": 200, "body": json.dumps(item)}

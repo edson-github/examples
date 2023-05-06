@@ -4,7 +4,7 @@ from log_cfg import logger
 
 
 def asset_list(event, context):
-    logger.debug('event: {}, context: {}'.format(event, context))
+    logger.debug(f'event: {event}, context: {context}')
 
     results = AssetModel.scan()
     return {

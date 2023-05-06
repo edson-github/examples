@@ -23,10 +23,4 @@ def update(event, context):
     ref = Ref(TODOS, event['pathParameters']['id'])
     updated = client.query(query.update(ref, {'data': data}))
 
-    # create a response
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(make_result(updated))
-    }
-
-    return response
+    return {"statusCode": 200, "body": json.dumps(make_result(updated))}

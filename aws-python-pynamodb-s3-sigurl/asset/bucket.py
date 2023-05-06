@@ -25,14 +25,13 @@ def event(event, context):
     #                                          'eTag': 'd50cb2e8d7ad6768d46b3d47ba9b241e',
     #                                          'sequencer': '005A1A0372C5A1D292'}}}]}
 
-    logger.debug('event: {}'.format(event))
+    logger.debug(f'event: {event}')
     event_name = event['Records'][0]['eventName']
     key = event['Records'][0]['s3']['object']['key']
-    asset_id = key.replace('{}/'.format(os.environ['S3_KEY_BASE']), '')
+    asset_id = key.replace(f"{os.environ['S3_KEY_BASE']}/", '')
 
     try:
-        if 'ObjectCreated:Put' == event_name:
-
+        if event_name == 'ObjectCreated:Put':
             try:
                 asset = AssetModel.get(hash_key=asset_id)
                 asset.mark_received()
@@ -43,8 +42,7 @@ def event(event, context):
                         'error_message': 'Unable to update ASSET'}
                 }
 
-        elif 'ObjectRemoved:Delete' == event_name:
-
+        elif event_name == 'ObjectRemoved:Delete':
             try:
                 asset = AssetModel.get(hash_key=asset_id)
                 asset.delete()
@@ -52,16 +50,14 @@ def event(event, context):
                 return {
                     'statusCode': httplib.BAD_REQUEST,
                     'body': {
-                        'error_message': 'Unable to delete ASSET {}'.format(asset)
-                    }
+                        'error_message': f'Unable to delete ASSET {asset}'
+                    },
                 }
 
     except DoesNotExist:
         return {
             'statusCode': httplib.NOT_FOUND,
-            'body': {
-                'error_message': 'ASSET {} not found'.format(asset_id)
-            }
+            'body': {'error_message': f'ASSET {asset_id} not found'},
         }
 
     return {'statusCode': httplib.ACCEPTED}

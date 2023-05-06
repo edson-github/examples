@@ -11,10 +11,7 @@ def list(event, context):
         query.map_expr(lambda ref: query.get(ref),
                        query.paginate(query.match(ALL_TODOS))))
 
-    # create a response
-    response = {
+    return {
         "statusCode": 200,
-        "body": json.dumps(map(make_result, results['data']))
+        "body": json.dumps(map(make_result, results['data'])),
     }
-
-    return response

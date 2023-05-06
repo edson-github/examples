@@ -53,7 +53,7 @@ def create(event, context):
     #                               'cognitoAuthenticationType': '', 'cognitoAuthenticationProvider': '', 'userArn': '',
     #                               'userAgent': 'curl/7.56.1', 'user': ''}, 'stageVariables': {}}
 
-    logger.debug('event: {}'.format(event))
+    logger.debug(f'event: {event}')
     asset = AssetModel()
     asset.asset_id = uuid.uuid1().__str__()
     asset.save()
