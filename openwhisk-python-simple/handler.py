@@ -1,5 +1,5 @@
 def endpoint(params):
     name = params.get("name", "stranger")
-    greeting = "Hello " + name + "!"
+    greeting = f"Hello {name}!"
     print(greeting)
     return {"greeting": greeting}

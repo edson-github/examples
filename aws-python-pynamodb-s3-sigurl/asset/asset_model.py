@@ -37,18 +37,18 @@ class AssetModel(Model):
     updatedAt = UTCDateTimeAttribute(null=False, default=datetime.now().astimezone())
 
     def __str__(self):
-        return 'asset_id:{}, state:{}'.format(self.asset_id, self.state)
+        return f'asset_id:{self.asset_id}, state:{self.state}'
 
     def get_key(self):
-        return u'{}/{}'.format(KEY_BASE, self.asset_id)
+        return f'{KEY_BASE}/{self.asset_id}'
 
     def save(self, conditional_operator=None, **expected_values):
         try:
             self.updatedAt = datetime.now().astimezone()
-            logger.debug('saving: {}'.format(self))
+            logger.debug(f'saving: {self}')
             super(AssetModel, self).save()
         except Exception as e:
-            logger.error('save {} failed: {}'.format(self.asset_id, e), exc_info=True)
+            logger.error(f'save {self.asset_id} failed: {e}', exc_info=True)
             raise e
 
     def __iter__(self):
@@ -70,7 +70,7 @@ class AssetModel(Model):
             ExpiresIn=ttl,
             HttpMethod='PUT'
         )
-        logger.debug('upload URL: {}'.format(put_url))
+        logger.debug(f'upload URL: {put_url}')
         return put_url
 
     def get_download_url(self, ttl=60):
@@ -81,9 +81,7 @@ class AssetModel(Model):
         s3 = boto3.client('s3')
         if self.state != State.UPLOADED.name:
             raise AssertionError(
-                'Asset {} is marked as {}, must be marked {} to retrieve.'.format(
-                    self.asset_id, self.state, State.UPLOADED.name
-                )
+                f'Asset {self.asset_id} is marked as {self.state}, must be marked {State.UPLOADED.name} to retrieve.'
             )
         get_url = s3.generate_presigned_url(
             'get_object',
@@ -94,7 +92,7 @@ class AssetModel(Model):
             ExpiresIn=ttl,
             HttpMethod='GET'
         )
-        logger.debug('download URL: {}'.format(get_url))
+        logger.debug(f'download URL: {get_url}')
         return get_url
 
     def mark_received(self):
@@ -102,7 +100,7 @@ class AssetModel(Model):
         Mark asset as having been received via the s3 objectCreated:Put event
         """
         self.state = State.RECEIVED.name
-        logger.debug('mark asset received: {}'.format(self.asset_id))
+        logger.debug(f'mark asset received: {self.asset_id}')
         self.save()
 
     def mark_uploaded(self):
@@ -111,9 +109,11 @@ class AssetModel(Model):
         """
         uploaded_states = [State.RECEIVED.name, State.UPLOADED.name]
         if self.state not in uploaded_states:
-            raise AssertionError('State: \"{}\" must be one of {}'.format(self.state, uploaded_states))
+            raise AssertionError(
+                f'State: \"{self.state}\" must be one of {uploaded_states}'
+            )
         self.state = State.UPLOADED.name
-        logger.debug('mark asset uploaded: {}'.format(self.asset_id))
+        logger.debug(f'mark asset uploaded: {self.asset_id}')
         self.save()
 
     def mark_deleted(self):
@@ -121,5 +121,5 @@ class AssetModel(Model):
         Mark asset as deleted (soft delete)
         """
         self.state = State.DELETED.name
-        logger.debug('mark asset deleted: {}'.format(self.asset_id))
+        logger.debug(f'mark asset deleted: {self.asset_id}')
         self.save()

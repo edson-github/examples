@@ -16,9 +16,4 @@ def webhook(event, context):
         msg['events'][0]['replyToken'],
         TextSendMessage(text=msg['events'][0]['message']['text'])
     )
-    response = {
-        "statusCode": 200,
-        "body": json.dumps({"message": 'ok'})
-    }
-
-    return response
+    return {"statusCode": 200, "body": json.dumps({"message": 'ok'})}

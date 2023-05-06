@@ -16,11 +16,7 @@ def get(event, context):
         }
     )
 
-    # create a response
-    response = {
+    return {
         "statusCode": 200,
-        "body": json.dumps(result['Item'],
-                           cls=decimalencoder.DecimalEncoder)
+        "body": json.dumps(result['Item'], cls=decimalencoder.DecimalEncoder),
     }
-
-    return response

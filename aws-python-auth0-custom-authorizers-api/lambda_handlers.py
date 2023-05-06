@@ -16,7 +16,7 @@ def auth(event, context):
     if not whole_auth_token:
         raise Exception('Unauthorized')
 
-    print('Client token: ' + whole_auth_token)
+    print(f'Client token: {whole_auth_token}')
     print('Method ARN: ' + event['methodArn'])
 
     token_parts = whole_auth_token.split(' ')
@@ -29,8 +29,7 @@ def auth(event, context):
 
     try:
         principal_id = jwt_verify(auth_token, AUTH0_CLIENT_PUBLIC_KEY)
-        policy = generate_policy(principal_id, 'Allow', event['methodArn'])
-        return policy
+        return generate_policy(principal_id, 'Allow', event['methodArn'])
     except Exception as e:
         print(f'Exception encountered: {e}')
         raise Exception('Unauthorized')
@@ -71,8 +70,7 @@ def generate_policy(principal_id, effect, resource):
 def convert_certificate_to_pem(public_key):
     cert_str = public_key.encode()
     cert_obj = load_pem_x509_certificate(cert_str, default_backend())
-    pub_key = cert_obj.public_key()
-    return pub_key
+    return cert_obj.public_key()
 
 
 def format_public_key(public_key):

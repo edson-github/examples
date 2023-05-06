@@ -13,8 +13,6 @@ def update(event, context):
     if 'text' not in data or 'checked' not in data:
         logging.error("Validation Failed")
         raise Exception("Couldn't update the todo item.")
-        return
-
     timestamp = int(time.time() * 1000)
 
     table = dynamodb.Table(os.environ['DYNAMODB_TABLE'])
@@ -38,11 +36,9 @@ def update(event, context):
         ReturnValues='ALL_NEW',
     )
 
-    # create a response
-    response = {
+    return {
         "statusCode": 200,
-        "body": json.dumps(result['Attributes'],
-                           cls=decimalencoder.DecimalEncoder)
+        "body": json.dumps(
+            result['Attributes'], cls=decimalencoder.DecimalEncoder
+        ),
     }
-
-    return response

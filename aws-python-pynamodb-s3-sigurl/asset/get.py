@@ -51,7 +51,7 @@ def get(event, context):
     #                  'userArn': '', 'userAgent': 'curl/7.56.1', 'user': ''},
     #     'stageVariables': {}}
 
-    logger.debug('event: {}'.format(event))
+    logger.debug(f'event: {event}')
     try:
         ttl = os.environ['URL_DEFAULT_TTL']
         try:
@@ -65,17 +65,13 @@ def get(event, context):
     except DoesNotExist:
         return {
             'statusCode': httplib.NOT_FOUND,
-            'body': {
-                'error_message': 'ASSET {} not found'.format(asset_id)
-            }
+            'body': {'error_message': f'ASSET {asset_id} not found'},
         }
 
     except AssertionError as e:
         return {
             'statusCode': httplib.FORBIDDEN,
-            'body': {
-                'error_message': 'Unable to download: {}'.format(e)
-            }
+            'body': {'error_message': f'Unable to download: {e}'},
         }
 
     return {
